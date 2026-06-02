@@ -1,48 +1,8 @@
 // ─── QUESTIONS (40 шт) ───
 const QUESTIONS = [
   // EASY
-  {d:"easy",q:"What does RLNC stand for?",o:["Random Latency Network Coding","Random Linear Network Coding","Recursive Layer Network Consensus","Rapid Linear Node Communication"],a:1,e:"RLNC — Random Linear Network Coding — is Optimum's core data encoding technique from MIT. It eliminates redundancy and improves loss tolerance."},
-  {d:"easy",q:"What is Optimum's primary role in the blockchain ecosystem?",o:["A new Layer 1 consensus mechanism","An Ethereum L2 rollup","A Universal Data Acceleration Network","A decentralized exchange"],a:2,e:"Optimum is the Universal Data Acceleration Network. It speeds up data movement between nodes without changing consensus."},
-  {d:"easy",q:"Compared to gossipsub, Optimum achieves approximately how much bandwidth reduction?",o:["20–30%","50–60%","90–95%","99%+"],a:2,e:"~90–95% bandwidth reduction vs gossipsub by eliminating redundant transmission via RLNC-coded frames."},
-  {d:"easy",q:"Which institution's research is the scientific foundation of Optimum?",o:["Stanford","ETH Zurich","MIT","Carnegie Mellon"],a:2,e:"Built on award-winning MIT research. Prof. Muriel Médard from MIT EECS is co-inventor of RLNC and Optimum's CEO."},
-  {d:"easy",q:"Who is the co-inventor of RLNC and a key figure behind Optimum?",o:["Vitalik Buterin","Prof. Muriel Médard","Satoshi Nakamoto","Anatoly Yakovenko"],a:1,e:"Prof. Muriel Médard, NEC Chair at MIT EECS, ranked #1 globally in Network Coding, co-invented RLNC and is Optimum's CEO."},
-  {d:"easy",q:"What is mump2p?",o:["A multi-user messaging protocol","Optimum's RLNC-accelerated gossipsub-compatible pub/sub","A memory pooling mechanism","A node uptime monitor"],a:1,e:"mump2p is Optimum's first production product — RLNC-accelerated pub/sub, fully libp2p/gossipsub compatible."},
-  {d:"easy",q:"Does Optimum require consensus rule changes to integrate?",o:["Yes, hard fork required","No — works at propagation layer, zero consensus changes","Only with validator vote","Only for PoW chains"],a:1,e:"Chain-agnostic by design, zero consensus modifications. Complements the existing stack."},
-  {d:"easy",q:"Optimum is designed to be:",o:["Compatible only with Ethereum","Compatible only with Solana","Chain-agnostic, works with any blockchain","Bitcoin only"],a:2,e:"Chain-agnostic — integrates with any blockchain without requiring protocol rewrites."},
-  {d:"easy",q:"What does Optimum primarily optimize?",o:["Smart contract execution","Data movement and propagation between nodes","Token fees","Wallet UX"],a:1,e:"Data movement sets the ceiling. Optimum optimizes how data propagates across the network."},
-  {d:"easy",q:"mump2p is compatible with which existing P2P stack?",o:["BitTorrent","libp2p / gossipsub","IPFS only","Fully proprietary"],a:1,e:"mump2p is libp2p/gossipsub-compatible, slots into existing infrastructure with no changes."},
-  {d:"easy",q:"What is the 'ceiling' that Optimum claims to raise?",o:["Gas fees","Token price","Data movement performance","Validator count"],a:2,e:"\"Data movement sets the ceiling. Optimum raises it.\" — the core tagline."},
-  {d:"easy",q:"What problem does most blockchain networking waste resources on?",o:["Mining difficulty","Redundant data transmission","Token swaps","Wallet signatures"],a:1,e:"Most networks burn bandwidth on redundant transmission. Optimum transmits less, delivers more."},
-  {d:"easy",q:"What kind of network does Optimum operate as?",o:["Closed permissioned consortium","Permissionless network anyone can run nodes on","Single centralized server","Private validator club"],a:1,e:"Permissionless network of flexnodes that anyone can operate alongside existing clients."},
-  {d:"easy",q:"Faster block and blob delivery with Optimum primarily benefits:",o:["NFT artists","Validators (fewer missed slots, better MEV)","CEX traders","Stablecoin issuers"],a:1,e:"More successful attestations, better MEV capture, fewer missed proposals — measurable revenue for validators."},
-  {d:"easy",q:"Optimum works alongside scaling solutions by:",o:["Replacing all execution layers","Complementing execution while improving network performance","Forcing chain mergers","Removing validators"],a:1,e:"Complementary to scaling — works alongside execution without touching protocol rules."},
-  // MEDIUM
-  {d:"medium",q:"What is a 'flexnode' in the Optimum network?",o:["Validator with MEV boost","Operator-run node that encodes/decodes RLNC-coded gossip frames","Smart contract on Ethereum","Governance token holder"],a:1,e:"Flexnodes encode/decode RLNC frames, maintain coded buffers, and serve DeRAM/DeROM requests."},
-  {d:"medium",q:"Optimum's DeRAM stands for:",o:["Decentralized Relay and Messaging","Distributed RAM for smart contracts","Decentralized Random Access Memory","Dynamic Resource Allocation Module"],a:2,e:"DeRAM — Decentralized Random Access Memory — shared-state memory layer with low-latency read-write semantics."},
-  {d:"medium",q:"How much faster can Optimum deliver blocks and blobs vs gossipsub?",o:["2–3x","6–20x","50x","About the same"],a:1,e:"6–20x faster block and blob delivery vs gossipsub."},
-  {d:"medium",q:"What is the relationship between DeRAM and DeROM?",o:["Competing protocols","DeRAM is read-write; DeROM is read-only/append-oriented","DeROM replaces DeRAM","They are the same"],a:1,e:"DeRAM = read-write shared-state. DeROM = read-only/append, optimized for broadcast and caching."},
-  {d:"medium",q:"What does a flexnode maintain to recover loss and smooth tail latency?",o:["A mempool","Bounded coded buffers","Full archive of chain history","List of validators"],a:1,e:"Flexnodes maintain bounded coded buffers to recover loss and smooth tail latency."},
-  {d:"medium",q:"Why does RLNC improve loss tolerance?",o:["Retransmits every packet twice","Coded fragments allow reconstruction from any sufficient subset","Faster connection","Zip compression"],a:1,e:"RLNC encodes data so any sufficient set of coded fragments reconstructs the original — no specific packets needed."},
-  {d:"medium",q:"Which product should builders adopt NOW for measurable latency gains?",o:["DeROM","DeRAM","mump2p","Native token"],a:2,e:"Adopt mump2p now; DeRAM and DeROM unlock low-latency reads/writes next."},
-  {d:"medium",q:"What types of data does mump2p propagate?",o:["NFT metadata only","Blocks, blobs, and transactions","Validator signatures only","Smart contract bytecode"],a:1,e:"mump2p provides fast, resilient propagation of blocks, blobs, and transactions."},
-  {d:"medium",q:"DeROM is optimized for:",o:["High-frequency trading","Broadcast and caching (read-only/append)","Private key storage","Token bridging"],a:1,e:"DeROM — Decentralized Read-Only Memory — read-only/append-oriented, optimized for broadcast and caching."},
-  {d:"medium",q:"What makes Optimum integration 'zero-setup' for operators?",o:["Requires special hardware","No infrastructure changes, no extra hardware, no consensus mods","Needs 6-month migration","Requires client rewrite"],a:1,e:"Permissionless, zero-setup — no infrastructure changes, no extra hardware, no consensus modifications."},
-  {d:"medium",q:"How do flexnodes interact with existing clients?",o:["Replace all clients","Interoperate with existing clients and libp2p/gossipsub","Require clients to shut down","Work in isolation only"],a:1,e:"Flexnodes interoperate with existing clients and libp2p/gossipsub where applicable."},
-  {d:"medium",q:"For validators, faster propagation primarily reduces risk of:",o:["Wallet hacks","Missed slots / missed proposals","Token inflation","Smart contract bugs"],a:1,e:"Lower latency → lower missed-slot risk → APY/MEV uplift for validators."},
-  {d:"medium",q:"Under standard RLNC models, the dissemination strategy is:",o:["Experimental","Provably optimal for throughput/latency under loss and contention","Slower but more secure","Testnet-only"],a:1,e:"Under standard RLNC models, strategy is provably optimal for throughput/latency under loss and contention."},
-  {d:"medium",q:"Optimum's approach to the memory layer:",o:["Ignores memory","Optimizes memory layer for accelerated data propagation and real-time access","Stores data on-chain only","Deletes old memory"],a:1,e:"Optimum's RLNC-based memory layer optimization accelerates data propagation and improves real-time access."},
-  {d:"medium",q:"mump2p accelerates:",o:["Token minting","Low-latency gossip across geographically distributed nodes","Database backups","Front-end rendering"],a:1,e:"Optimum accelerates low-latency gossip across geographically distributed nodes, reducing congestion."},
-  // HARD
-  {d:"hard",q:"Which user type does NOT directly benefit from Optimum per its docs?",o:["L1/L2 teams needing faster blob propagation","Validators seeking lower missed-slot risk","dApp developers wanting faster tx inclusion","Fiat currency traders on CEXes"],a:3,e:"Documented users: L1/L2 teams, validators, node operators, builders, dApp devs. CEX traders are outside scope."},
-  {d:"hard",q:"Optimum is described in its docs as the fastest decentralized internet protocol for:",o:["Gaming","Web3","Video streaming","Email"],a:1,e:"\"Optimum is the fastest decentralized internet protocol for web3.\""},
-  {d:"hard",q:"Which testnet/partner metric does Optimum highlight?",o:["1 million TPS","40+ testnet partners and counting","500 validators max","10-second block times"],a:1,e:"Optimum highlights 40+ testnet partners & counting, and $24b ETH stake connected."},
-  {d:"hard",q:"What is 'DeROM' short for?",o:["Decentralized Routing Module","Decentralized Read-Only Memory","Distributed Relay Output Mesh","Dynamic Read Operation Manager"],a:1,e:"DeROM — Decentralized Read-Only Memory — read-only/append memory for broadcast and caching."},
-  {d:"hard",q:"In RLNC, what must a node collect to decode the original data?",o:["Exact original packets in order","Enough linearly independent coded fragments","A password from sender","Full blockchain history"],a:1,e:"A node needs enough linearly independent coded fragments to reconstruct original data — not specific packets."},
-  {d:"hard",q:"Optimum's DeRAM exposes what kind of semantics across nodes?",o:["Write-once read-never","Low-latency shared-state read-write semantics","Encrypted-only storage","Single-node local cache"],a:1,e:"DeRAM exposes low-latency shared-state read-write semantics across nodes."},
-  {d:"hard",q:"What does Optimum claim about MEV for validators?",o:["Eliminates MEV entirely","Faster propagation can improve MEV capture potential","Bans MEV","MEV is irrelevant"],a:1,e:"Faster inclusion and improved MEV capture potential — a meaningful upgrade for validator operations."},
-  {d:"hard",q:"Why is reducing redundant transmission important under network load?",o:["Makes tokens cheaper","Redundant transmission wastes bandwidth and slows propagation under load","Increases mining rewards","No real effect"],a:1,e:"Most networks rely on redundant transmission that wastes bandwidth and slows propagation under load."},
-  {d:"hard",q:"What is the broad category Optimum positions itself in?",o:["A meme coin","High-performance memory/data infrastructure for any blockchain","A centralized cloud provider","A hardware wallet"],a:1,e:"\"The world's first high-performance memory infrastructure for any blockchain.\""},
-  {d:"hard",q:"What technique does Optimum apply to gossip to reduce redundancy?",o:["Sharding","Random Linear Network Coding (RLNC)","Merkle proofs","Zero-knowledge rollups"],a:1,e:"By applying RLNC to gossip, Optimum reduces redundancy and improves loss tolerance."},
+  {d:"easy",q:"What does RLNC stand for?",o:["Random Latency Network Coding","Random Linear Network Coding","Recursive Layer Network Consensus","Rapid Linear Node Communication"],a:1,e:"RLNC — Random Linear Network Coding. The math behind Optimum's efficiency."},
+  {d:"easy",q:"What is Optimum's primary role?",o:["Layer 1 consensus","L2 rollup","Universal Data Acceleration Network","DEX"],a:2,e:"Universal Data Acceleration Network for faster data movement."},
 ];
 
 // ─── TIERS ───
@@ -67,7 +27,7 @@ function shuffle(arr){
 // ─── STATE ───
 let pool=[], cur=0, sc=0, answered=false, t0=0, elapsed=0;
 
-// ─── BUILD POOL: 4 easy + 4 medium + 2 hard, shuffled answers ───
+// ─── BUILD POOL ───
 function buildPool(){
   const easy=shuffle(QUESTIONS.filter(q=>q.d==="easy")).slice(0,4);
   const med =shuffle(QUESTIONS.filter(q=>q.d==="medium")).slice(0,4);
@@ -122,7 +82,6 @@ function renderQ(){
   $('feedback').innerHTML='';
   $('nextwrap').style.display='none';
 
-  // entrance animation
   const card=$('qcard');
   card.style.opacity='0';
   card.style.transform='translateY(16px)';
@@ -186,9 +145,9 @@ function restart(){ show('s-intro'); }
 // ─── TWEET ───
 function buildTweet(score,tier){
   const v={
-    "Flexnode Master":[`just scored 10/10 on the optimum knowledge challenge`,``,`➤ rank: flexnode master`,`➤ time: ${fmtTime(elapsed)}`,``,`RLNC. mump2p. flexnodes. deRAM. know the protocol cold.`,``,`think you can match it?`],
-    "Validator":[`${score}/10 on the optimum knowledge challenge. earned validator rank.`,``,`➤ time: ${fmtTime(elapsed)}`,``,`solid grasp on how optimum moves data faster than gossipsub. still gaps on the deeper stuff.`,``,`your turn:`],
-    "Node Operator":[`ran the optimum knowledge challenge. ${score}/10, node operator rank.`,``,`➤ time: ${fmtTime(elapsed)}`,``,`RLNC and mump2p make sense now. back to the docs for the rest.`,``,`can you beat me?`],
+    "Flexnode Master":[`just scored 10/10 on the optimum knowledge challenge`,``,`➤ rank: flexnode master`,`➤ time: ${fmtTime(elapsed)}`,``,`RLNC. mump2p. flexnodes. deRAM. know the protocol.`,``,`how well do you know optimum?`],
+    "Validator":[`${score}/10 on the optimum knowledge challenge. earned validator rank.`,``,`➤ time: ${fmtTime(elapsed)}`,``,`solid grasp on how optimum moves data faster than gossipsub.`,``,`test yourself:`],
+    "Node Operator":[`ran the optimum knowledge challenge. ${score}/10, node operator rank.`,``,`➤ time: ${fmtTime(elapsed)}`,``,`RLNC and mump2p make sense now. back to the docs for the rest.`,``,`how well do you know optimum?`],
     "Newcomer":[`just took the optimum knowledge challenge. ${score}/10.`,``,`clearly need more time in the docs lol. the RLNC tech is wild once it clicks.`,``,`see how you do:`],
   };
   return v[tier.name].join('\n');
