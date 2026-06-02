@@ -1,77 +1,173 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Optimum · Knowledge Challenge</title>
-<meta name="description" content="Test your knowledge of the Universal Data Acceleration Network. Earn your rank, download a certificate, share it on X.">
-<meta property="og:title" content="Optimum Knowledge Challenge">
-<meta property="og:description" content="10 questions on RLNC, mump2p, flexnodes & more. Earn your rank and a shareable certificate.">
-<meta property="og:type" content="website">
-<meta name="twitter:card" content="summary_large_image">
-<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
-<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<meta name="theme-color" content="#0a0a0c">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
+// ═══════════════════════════════════════════════════════
+//  OPTIMUM KNOWLEDGE CHALLENGE — APP LOGIC (HARDCORE MODE)
+// ═══════════════════════════════════════════════════════
 
-<!-- cursor -->
-<div id="cur-glow"></div>
-<div id="cur-ring"></div>
-<div id="cur-dot"></div>
+const TIERS = [
+  { min:0,  max:4,  name:"Newcomer",       emoji:"🌱", col:"var(--txt2)",  desc:"just getting started. the RLNC tech is genuinely fascinating once it clicks. dig into the docs." },
+  { min:5,  max:7,  name:"Node Operator",  emoji:"⚡", col:"var(--azure)", desc:"solid foundation. you understand the core architecture of how optimum accelerates data movement. keep going." },
+  { min:8,  max:9,  name:"Validator",      emoji:"🔐", col:"var(--peach)", desc:"deep knowledge of the protocol. you clearly spent time in the docs and grasp the technical nuance." },
+  { min:10, max:10, name:"Flexnode Master",emoji:"🏆", col:"var(--lav)",   desc:"perfect score. protocol-level understanding. the network would be lucky to have you running a flexnode." }
+];
 
-<!-- overlays -->
-<div id="grain"></div>
-<canvas id="bg-canvas"></canvas>
-<div id="grid-overlay"></div>
+let pool = [];        
+let cur = 0, sc = 0, answered = false;
+let t0 = 0, elapsed = 0;
+let qTimer, timeLeft = 15;
 
-<!-- loader -->
-<div id="loader" style="display:none"><div class="lspin"></div><div class="ltxt">generating certificate…</div></div>
+const $ = id => document.getElementById(id);
+const tierFor = s => TIERS.find(t => s >= t.min && s <= t.max);
+const fmtTime = s => `${Math.floor(s/60)}:${(s%60).toString().padStart(2, '0')}`;
 
-<!-- ════════════ CERTIFICATE (off-screen render target) ════════════ -->
-<div id="cert-shell" style="display:none">
-<div id="cert">
-  <!-- (весь вміст cert залишається без змін) -->
-  <div class="cl c-mesh"></div>
-  <div class="cl c-grid"></div>
-  <div class="cl c-topline"></div>
-  <div class="cl c-blob-l">...</div>
-  <div class="cl c-blob-r">...</div>
-  <div class="cl c-corner ctl"></div>
-  <div class="cl c-corner ctr"></div>
-  <div class="cl c-corner cbl"></div>
-  <div class="cl c-corner cbr"></div>
-  <img class="cl c-mascot" id="cert-mascot" src="assets/mascot.png" alt="" onerror="this.style.display='none'">
-  <div class="cl c-body">
-    <!-- весь контент сертифіката без змін -->
-    <div class="c-brand">...</div>
-    <div class="c-presents">This certifies that</div>
-    <div class="c-name" id="cn-name">Your Name</div>
-    <div class="c-div"></div>
-    <div class="c-tier" id="cn-tier">Node Operator</div>
-    <div class="c-tsub">Optimum Knowledge Challenge</div>
-    <div class="c-stats">...</div>
-  </div>
-  <div class="cl c-foot">...</div>
-</div>
-</div>
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
+  const el = $(id);
+  if (el) el.classList.add('on');
+}
 
-<!-- PAGE -->
-<div class="wrap">
-  <!-- nav, intro, quiz, results — все без змін -->
-  <!-- (я не копіюю весь великий HTML тут, щоб повідомлення не було 100кб, але ти можеш просто скопіювати свій старий index.html і замінити тільки loader і cert-shell) -->
+// ─── QUIZ LOGIC & TIMER ───
+function startQuiz() {
+  if (typeof QUESTION_BANK === 'undefined' || QUESTION_BANK.length === 0) {
+    console.error("Error: QUESTION_BANK not found.");
+    return;
+  }
+  pool = [...QUESTION_BANK].sort(() => 0.5 - Math.random()).slice(0, 10);
+  cur = 0; sc = 0; elapsed = 0;
+  t0 = Date.now();
+  show('s-quiz');
+  showQ();
+}
 
-  <!-- Важливо: залиш весь інший код як є, тільки loader і cert-shell мають style="display:none" -->
+function showQ() {
+  answered = false;
+  timeLeft = 15;
+  const q = pool[cur];
+  
+  if ($('q-num')) $('q-num').textContent = `Question ${cur + 1} / 10`;
+  if ($('q-text')) $('q-text').textContent = q.q;
+  
+  const opts = $('q-opts');
+  if (opts) {
+    opts.innerHTML = '';
+    q.o.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'opt';
+      btn.textContent = opt;
+      btn.onclick = () => answer(i, btn);
+      opts.appendChild(btn);
+    });
+  }
 
-</div>
+  // Динамічно створюємо таймер, щоб не чіпати index.html
+  let timerEl = $('q-timer');
+  if (!timerEl) {
+    timerEl = document.createElement('div');
+    timerEl.id = 'q-timer';
+    timerEl.style.cssText = 'color:#AA00FF; font-weight:bold; font-size:18px; margin-bottom:16px;';
+    const qText = $('q-text');
+    if (qText && qText.parentNode) {
+      qText.parentNode.insertBefore(timerEl, qText);
+    }
+  }
 
-<script src="questions.js"></script>
-<script src="app.js"></script>
-</body>
-</html>
+  timerEl.textContent = `⏳ ${timeLeft}s`;
+  clearInterval(qTimer);
+  qTimer = setInterval(() => {
+    timeLeft--;
+    timerEl.textContent = `⏳ ${timeLeft}s`;
+    
+    if (timeLeft <= 0) {
+      clearInterval(qTimer);
+      if (!answered) answer(-1, null);
+    }
+  }, 1000);
+}
+
+function answer(idx, btnEl) {
+  if (answered) return;
+  answered = true;
+  clearInterval(qTimer);
+
+  const q = pool[cur];
+  const isCorrect = (idx === q.a);
+  if (isCorrect) sc++;
+
+  if (btnEl) {
+    btnEl.style.backgroundColor = isCorrect ? '#00FF00' : '#FF0000';
+    btnEl.style.color = '#000';
+  }
+
+  setTimeout(() => {
+    cur++;
+    if (cur >= pool.length) endQuiz();
+    else showQ();
+  }, 1200);
+}
+
+function endQuiz() {
+  elapsed = Math.floor((Date.now() - t0) / 1000);
+  const tier = tierFor(sc);
+  
+  if ($('s-res')) {
+    if ($('s-score')) $('s-score').textContent = sc;
+    if ($('s-tier-name')) $('s-tier-name').textContent = tier.name;
+    if ($('s-t')) $('s-t').textContent = fmtTime(elapsed);
+    show('s-res');
+  }
+}
+
+function restart() {
+  show('s-intro');
+}
+
+// ─── TWEET BUILDER ───
+function buildTweet(score, tier, secs) {
+  return `I just scored ${score}/10 on the Optimum Knowledge Challenge! 🚀\nRank: ${tier.name}\nTime: ${fmtTime(secs)}\n\nTest your knowledge: https://optimum-knowledge-challenge.vercel.app/`;
+}
+
+// ─── FALLBACK FUNCTIONS ───
+function initMagnetic() {}
+function copyTweet() {}
+function downloadCert() {}
+
+// ─── BACKGROUND CANVAS ───
+(function(){
+  const cv = document.getElementById('bg-canvas');
+  if (!cv) return;
+  const cx = cv.getContext('2d');
+  const rz = () => { cv.width = innerWidth; cv.height = innerHeight; }; 
+  rz();
+  addEventListener('resize', rz);
+  const orbs = [
+    {x:.16, y:.2,  r:340, c:[170,0,255], vx:.00006,  vy:.00004}, 
+    {x:.8,  y:.62, r:280, c:[81,177,254],  vx:-.00007, vy:.00006},
+    {x:.5,  y:.9,  r:220, c:[100,226,127], vx:.00008,  vy:-.00005},
+    {x:.92, y:.12, r:180, c:[254,161,88],  vx:-.00005, vy:.00007},
+  ];
+  let t = 0;
+  (function draw(){
+    cx.clearRect(0,0,cv.width,cv.height);
+    t++;
+    orbs.forEach((o,i)=>{
+      o.x += o.vx; o.y += o.vy;
+      if(o.x<0 || o.x>1) o.vx *= -1;
+      if(o.y<0 || o.y>1) o.vy *= -1;
+      cx.beginPath();
+      cx.arc(o.x*cv.width, o.y*cv.height, o.r, 0, Math.PI*2);
+      cx.fillStyle = `rgba(${o.c[0]},${o.c[1]},${o.c[2]},0.15)`;
+      cx.fill();
+    });
+    requestAnimationFrame(draw);
+  })();
+})();
+
+// ─── INIT ───
+window.addEventListener('load', () => {
+  if ($('loader')) $('loader').style.display = 'none';
+  if ($('cert-shell')) $('cert-shell').style.display = 'none';
+
+  show('s-intro');
+  console.log('%c✅ Optimum Knowledge Challenge ready!', 'color:#AA00FF;font-size:16px');
+  
+  const startBtn = document.querySelector('.btn-start');
+  if (startBtn) startBtn.addEventListener('click', startQuiz);
+});
