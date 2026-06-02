@@ -185,12 +185,12 @@ window.addEventListener('load', () => {
   document.getElementById('loader').style.display = 'none';
   const cert = document.getElementById('cert-shell');
   if (cert) cert.style.display = 'none';
-  
+
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
   const intro = document.getElementById('s-intro');
   if (intro) intro.classList.add('on');
-  
-  console.log('%c✅ Optimum Knowledge Challenge готовий!', 'color:#b87cff;font-size:16px');
+
+  console.log('%c✅ Optimum Knowledge Challenge готовий!', 'color:#AA00FF;font-size:16px');
 });
 
 initMagnetic();
